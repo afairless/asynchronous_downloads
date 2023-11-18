@@ -1,0 +1,13 @@
+Elapsed time for sequential downloads: 5.253281831741333 seconds
+Elapsed time for asynchronous downloads: 0.13846731185913086 seconds
+
+
+Sequential downloads, first item:
+bytearray(b'{\n  "userId": 1,\n  "id": 1,\n  "title": "delectus aut autem",\n  "completed": false\n}')
+
+
+Asynchronous downloads, first item:
+bytearray(b'{\n  "userId": 1,\n  "id": 1,\n  "title": "delectus aut autem",\n  "completed": false\n}')
+
+
+Both sets of downloads are identical
