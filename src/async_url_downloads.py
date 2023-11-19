@@ -5,7 +5,7 @@ import time
 import asyncio
 import aiohttp
 import requests
-from typing import Callable
+from typing import Callable, Any
 
 
 async def request_url_response_content(
@@ -27,6 +27,20 @@ async def request_url_response_content(
             return bytearray()
 
 
+async def request_url_response_json(
+    session: aiohttp.ClientSession, url: str) -> dict[Any, Any]:
+    """
+    Asynchronously download URL response content as JSON
+    If response is invalid, return empty result
+    """
+    async with session.get(url) as response:
+        if response.ok:
+            response_json = await response.json()
+            return response_json
+        else:
+            return {}
+
+
 async def request_url_csv_list(
     session: aiohttp.ClientSession, url: str, delimiter: str=','
     ) -> list[list[str]]:
@@ -35,19 +49,26 @@ async def request_url_csv_list(
         where nested lists represent each row of the 'csv' file
     If response is invalid, return empty result
     """
+
     async with session.get(url) as response:
+
         if response.ok:
+
             b_array = bytearray()
             while True:
                 chunk = await response.content.read(1024)
                 b_array.extend(chunk)
                 if not chunk:
                     break
+
             decoded_content = b_array.decode('utf-8')
             cr = csv.reader(decoded_content.splitlines(), delimiter=delimiter)
             cr_list = list(cr)
+
             return cr_list 
+
         else:
+
             return [['']]
 
 
