@@ -5,7 +5,24 @@ import time
 import asyncio
 import aiohttp
 import requests
+from pathlib import Path
 from typing import Callable, Any
+
+
+async def save_stream_by_line(
+    session: aiohttp.ClientSession, url: str, payload: dict[str, Any],
+    headers: dict[str, str], filepath: str | Path):
+    """
+    Asynchronously download URL streaming response content and append to text 
+        file
+    Requires specification of payload and headers
+    """
+
+    async with session.get(url, data=payload, headers=headers) as response:
+        with open(filepath, 'ab') as text_file:
+            async for line in response.content:
+                if line:
+                    text_file.write(line)
 
 
 async def request_url_response_content(
